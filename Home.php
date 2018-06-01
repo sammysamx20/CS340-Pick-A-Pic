@@ -23,13 +23,15 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "SELECT pictureid, owner,PictureData FROM FinPicture";
+    $sql = "SELECT pictureid, owner,PictureData,Description FROM FinPicture";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         // output data of each row
         while($row = $result->fetch_assoc()) {
-            echo "pictureid: " . $row["pictureid"]. " - Owner: " . $row["owner"]. " - Picture: " . $row["PictureData"]."<br>";
+          echo "<br> owner: ". $row["owner"]. "<br>";
+            echo' "<img src="data:image/jpeg;base64,'.base64_encode( $row['PictureData'] ).'"/>' ;
+            echo "<br> Description: ". $row["Description"]. "<br>";
         }
     } else {
         echo "0 results";
