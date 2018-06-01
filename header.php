@@ -1,7 +1,7 @@
 
 
 	<header>
-		Pick-A-Pick - <em>Welcome <span id="username"></span>!</em>
+		Pick-A-Pic - <em>Welcome <span id="username"></span>!</em>
 	</header>
 	<nav>
 		<ul>
