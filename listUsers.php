@@ -1,19 +1,58 @@
 <!DOCTYPE html>
+<?php
+		$currentpage="List Users";
+		include "pages.php";
+?>
 <html>
 	<head>
-		<title>List of Users</title>
+		<title>List Users</title>
 		<link rel="stylesheet" href="index.css">
 	</head>
 <body>
 
 
+<?php
+// change the value of $dbuser and $dbpass to your username and password
+	include 'connectvars.php';
+	include 'header.php';
+
+	$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+	if (!$conn) {
+		die('Could not connect: ' . mysql_error());
+	}
+
+// query to select all information from supplier table
+	$query = "SELECT * FROM FinUser ";
 
 
-<?php include 'header.php';?>
-<h1>Users:</h1><table id='t01' border='1'><tr><td><b>username</b></td><td><b>firstName</b></td><td><b>lastName</b></td><td><b>email</b></td><td><b>password</b></td><td><b>age</b></td><td><b>salt</b></td></tr>
-<tr><td>lea</td><td>Amy</td><td>Le</td><td>lee@osu.edu</td><td>c3a6a85e67545f81dddf71a783a64fca</td><td>20</td><td>zEcBxNXorAh9rzG0</td></tr>
-<tr><td>lea1</td><td>Amy</td><td>Le</td><td>lee@osu.edu</td><td>6225a76a890e89a88395ac7cf21d3546</td><td>0</td><td>NL6qaS6pAZlEsozY</td></tr>
-<tr><td>sam</td><td>sam</td><td>young</td><td>sam@gmail.com</td><td>54ccf3505e816d4d4d7333e0e25afa38</td><td>3</td><td>iJNWayocMoyvqdI3</td></tr>
+// Get results from query
+	$result = mysqli_query($conn, $query);
+	if (!$result) {
+		die("Query to show fields from table failed");
+	}
+// get number of columns in table
+	$fields_num = mysqli_num_fields($result);
+	echo "<h1>Users:</h1>";
+	echo "<table id='t01' border='1'><tr>";
+
+// printing table headers
+	for($i=0; $i<$fields_num; $i++) {
+		$field = mysqli_fetch_field($result);
+		echo "<td><b>$field->name</b></td>";
+	}
+	echo "</tr>\n";
+	while($row = mysqli_fetch_row($result)) {
+		echo "<tr>";
+		// $row is array... foreach( .. ) puts every element
+		// of $row to $cell variable
+		foreach($row as $cell)
+			echo "<td>$cell</td>";
+		echo "</tr>\n";
+	}
+
+	mysqli_free_result($result);
+	mysqli_close($conn);
+?>
 </body>
 
 </html>
