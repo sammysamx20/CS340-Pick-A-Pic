@@ -30,7 +30,7 @@
         // output data of each row
         while($row = $result->fetch_assoc()) {
           echo "<br> owner: ". $row["owner"]. "<br>";
-            echo' "<img src="data:image/jpeg;base64,'.base64_encode( $row['PictureData'] ).'"/>' ;
+            echo' "<img src="data:image/jpeg;base64,'.( $row['PictureData'] ).'"/>' ;
             echo "<br> Description: ". $row["Description"]. "<br>";
         }
     } else {
