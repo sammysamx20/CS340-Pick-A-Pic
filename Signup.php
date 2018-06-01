@@ -11,14 +11,7 @@
 
 
 
-	<header>
-		CS 340 HW1 Sam Young - <em>Welcome <span id="username"></span>!</em>
-	</header>
-	<nav>
-		<ul>
-		<li><a href='Signup.php?user='  class='active'>Sign up</a></li><li><a href='listUsers.php?user=' >List Users</a></li><li><a href='logIn.php?user=' >Log In</a></li>		</ul>
-
-	</nav>
+<?php include 'header.php';?>
 	<section>
     <h2> Signing up for an Account </h2>
 

@@ -43,11 +43,7 @@ nav li {
     border-right:1px solid #bbb;
 }
 
-nav li:nth-last-child(-n+4){
-    border-right: none;
-    float: right;
-    border-left:1px solid #bbb;
-}
+
 
 nav li a {
     display: block;

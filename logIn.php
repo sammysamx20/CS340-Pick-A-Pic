@@ -4,21 +4,14 @@
 	<head>
 		<title>Log In</title>
 		<link rel="stylesheet" href="index.css">
-	
+
 	</head>
 <body>
 
 
 
 
-	<header>
-		CS 340 HW1 Sam Young - <em>Welcome <span id="username"></span>!</em>
-	</header>
-	<nav>
-		<ul>
-		<li><a href='Signup.php?user=' >Sign up</a></li><li><a href='listUsers.php?user=' >List Users</a></li><li><a href='logIn.php?user='  class='active'>Log In</a></li>		</ul>
-
-	</nav>
+	<?php include 'header.php';?>
 	<section>
     <h2> Logging In </h2>
 
