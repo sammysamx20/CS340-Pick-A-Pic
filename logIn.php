@@ -38,11 +38,11 @@ Username<!DOCTYPE html>
 	  $finalResult = mysqli_query($conn, $saltSql);
 	  if($finalrow = mysqli_fetch_assoc($finalResult)){
 	    echo "Success, you have logged in!";
-	  return true;
+	 // return true;
 	}
 	}
 	echo "Failed, please click the Log In tab and try again.";
-	return false;
+//	return false;
 	}
 
 
