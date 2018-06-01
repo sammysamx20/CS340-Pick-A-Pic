@@ -43,7 +43,10 @@ nav li {
     border-right:1px solid #bbb;
 }
 
-
+img {
+	height: 300px;
+	width: 300px;
+}
 
 nav li a {
     display: block;
