@@ -16,6 +16,15 @@
   <div class="col s12" style="padding:20px;">
     <div class="card blue-grey darken-1">
       <div class="card-content white-text">
+				<div class="col s2 right">
+					<form method="post" id="addRating">
+				    <p class="range-field">
+				      <input type="range" name="rating" id="rating" min="0" max="5" />
+				    </p>
+						<button class="btn waves-effect waves-light" type="submit" name="submitRating">Rate
+						</button>
+				  </form>
+				</div>
         <!--<span class="card-title">Pictures</span>-->
 
 			<?php
@@ -33,7 +42,7 @@
 			      die("Connection failed: " . $conn->connect_error);
 			  }
 				$picId = $_GET['pictureId'];
-			  $sql = "SELECT pictureid, owner,PictureData,Description FROM FinPicture WHERE pictureid = $picId";
+			  $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
 			  $result = $conn->query($sql);
 
 			  if ($result->num_rows > 0) {
@@ -42,6 +51,7 @@
 			        echo "<br> owner: ". $row["owner"]. "<br>";
 			        echo '<img style="width:80%;" src="data:image/jpeg;base64,'.( $row['PictureData'] ).'"/>' ;
 			        echo "<br> ". $row["Description"]. "<br>";
+							echo "<a class='yellow right'>User rating: ".$row['Rating']."</a>";
 			      }
 			  } else {
 			    echo "0 results";
@@ -74,24 +84,51 @@
 							echo '<li class="collection-item avatar">';
       				echo '<i class="material-icons circle" style="background-color:#'.$hex.'">person_pin</i>';
       				echo '<p>';
-			        echo "<br> owner: ". $row["Owner"]. "<br>";
+			        echo "<br>". $row["Owner"]. "<br>";
 			        echo $row["Content"];
 							echo '</p></li>';
 			      }
 			  }
 				if ($_SERVER["REQUEST_METHOD"] == "POST") {
-					// Escape user inputs for security
-					$comment = mysqli_real_escape_string($conn, $_POST['Comment']);
-					$owner = "User1"; //TODO
-					$comID = rand(10,10000000);
+					if(isset($_POST["submitComment"])){
+						// Escape user inputs for security
+						$comment = mysqli_real_escape_string($conn, $_POST['Comment']);
+						$owner = "User1"; //TODO
+						$comID = rand(10,10000000);
 
-					$resultIn = mysqli_query($conn, $queryIn);
-					$query = "INSERT INTO `FinComment` (`commentID`, `pictureID`, `Content`, `Owner`) VALUES ('$comID', '$picId', '$comment', '$owner')";
-					if(mysqli_query($conn, $query)){
-						//$msg =  "Record added successfully.<p>";
-					} else{
-						echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+						$resultIn = mysqli_query($conn, $queryIn);
+						$query = "INSERT INTO `FinComment` (`commentID`, `pictureID`, `Content`, `Owner`) VALUES ('$comID', '$picId', '$comment', '$owner')";
+						if(mysqli_query($conn, $query)){
+							//$msg =  "Record added successfully.<p>";
+						} else{
+							echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+						}
+					} else if(isset($_POST["submitRating"])){
+						$rating = mysqli_real_escape_string($conn, $_POST['rating']);
+						$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE RATING,NOT PICTURE.
+
+						$sql = "SELECT Owner, Picture FROM FinUserRating WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
+
+					  $result = $conn->query($sql);
+						$rowcount=mysqli_num_rows($result);
+					  if ($rowcount > 0) {
+							$query = "UPDATE `FinUserRating` SET `Rating` = '$rating' WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
+							if(mysqli_query($conn, $query)){
+								$msg =  "you rated me.<p>";
+							} else{
+								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+							}
+						} else {
+							debug_to_console("new entry");
+							$query = "INSERT INTO `FinUserRating` (`Owner`, `Rating`, `Picture`) VALUES ('$owner', '$rating', '$picId')";
+							if(mysqli_query($conn, $query)){
+								$msg =  "you rated me.<p>";
+							} else{
+								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+							}
+						}
 					}
+
 				}
 			  $conn->close();
 			?>
@@ -104,8 +141,12 @@
 				  </p>
 				</fieldset>
 			    <p>
-			      <input type = "submit"  value = "Submit" />
-			      <input type = "reset"  value = "Clear Form" />
+						<button class="btn waves-effect waves-light submit" type="submit" name="submitComment">Submit
+							<i class="material-icons right">send</i>
+						</button>
+						<button class="btn waves-effect waves-light submit" type="reset" name="action">Reset
+							<i class="material-icons right">clear</i>
+						</button>
 			    </p>
 				</form>
 			</li>
