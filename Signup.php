@@ -10,7 +10,7 @@
 <html>
 	<head>
 		<title>Sign Up</title>
-		<link rel="stylesheet" href="index.css">
+		<?php include 'css.php';?>
 		<script type = "text/javascript"  src = "verifyInput.js" > </script>
 	</head>
 <body>
