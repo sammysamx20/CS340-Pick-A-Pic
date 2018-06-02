@@ -30,8 +30,10 @@
         // output data of each row
         while($row = $result->fetch_assoc()) {
           echo "<br> owner: ". $row["owner"]. "<br>";
-            echo' "<img src="data:image/jpeg;base64,'.( $row['PictureData'] ).'"/>' ;
-            echo "<br> Description: ". $row["Description"]. "<br>";
+					echo '<a href="image?pictureId='.( $row['pictureid'] ).'">';
+          echo '<img src="data:image/jpeg;base64,'.( $row['PictureData'] ).'"/>';
+					echo '</a>';
+          echo "<br> Description: ". $row["Description"]. "<br>";
         }
     } else {
         echo "0 results";

@@ -16,10 +16,6 @@
 <body>
 
 <?php
-
- ?>
-
-<?php
 	include "header.php";
 	$msg = "Add new user to the database.";
 

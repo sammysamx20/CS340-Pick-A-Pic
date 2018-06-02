@@ -36,11 +36,6 @@
   $image_data=file_get_contents($img);
   $encoded_image=base64_encode($image_data);
 
-
-  debug_to_console($encoded_image);
-  $var = "im a variable";
-  debug_to_console($var);
-
   $picID = rand(10,10000000);
   $owner = "User1";
 
