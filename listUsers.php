@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<title>List Users</title>
-		<link rel="stylesheet" href="index.css">
+		<?php include 'css.php';?>
 	</head>
 <body>
 
@@ -32,23 +32,31 @@
 	}
 // get number of columns in table
 	$fields_num = mysqli_num_fields($result);
-	echo "<h1>Users:</h1>";
-	echo "<table id='t01' border='1'><tr>";
+	echo '<div class="row">';
+		echo '<div class="col s12 m12">';
+			echo '<div class="card grey lighten-1">';
+				echo '<div class="card-content black-text">';
+					echo "<h1>Users:</h1>";
+					echo "<table class='striped' id='t01' border='1'><tr>";
 
-// printing table headers
-	for($i=0; $i<$fields_num; $i++) {
-		$field = mysqli_fetch_field($result);
-		echo "<td><b>$field->name</b></td>";
-	}
-	echo "</tr>\n";
-	while($row = mysqli_fetch_row($result)) {
-		echo "<tr>";
-		// $row is array... foreach( .. ) puts every element
-		// of $row to $cell variable
-		foreach($row as $cell)
-			echo "<td>$cell</td>";
-		echo "</tr>\n";
-	}
+					// printing table headers
+					for($i=0; $i<$fields_num; $i++) {
+						$field = mysqli_fetch_field($result);
+						echo "<td><b>$field->name</b></td>";
+					}
+					echo "</tr>\n";
+					while($row = mysqli_fetch_row($result)) {
+						echo "<tr>";
+						// $row is array... foreach( .. ) puts every element
+						// of $row to $cell variable
+						foreach($row as $cell)
+							echo "<td>$cell</td>";
+						echo "</tr>\n";
+					}
+				echo "</div>";
+			echo "</div>";
+		echo "</div>";
+	echo "</div>";
 
 	mysqli_free_result($result);
 	mysqli_close($conn);

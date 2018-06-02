@@ -3,7 +3,7 @@ Username<!DOCTYPE html>
 <html>
 	<head>
 		<title>Log In</title>
-		<link rel="stylesheet" href="index.css">
+		<?php include 'css.php';?>
 
 	</head>
 <body>
