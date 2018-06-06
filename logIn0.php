@@ -45,7 +45,6 @@ session_start();
 	    echo "Success, you have logged in!";
 			session_start();
 	                             $_SESSION['Username'] = $Username;
-															 
 
 	}
 	else{

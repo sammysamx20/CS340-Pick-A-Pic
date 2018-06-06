@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+
+ ?>
 <!DOCTYPE html>
 <!-- Add Part Info to Table Part -->
 
