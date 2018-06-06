@@ -15,6 +15,29 @@
 <div class="row">
   <div class="col s12" style="padding:20px;">
     <div class="card blue-grey darken-1">
+			<form method="post">
+				<button style="position:absolute; top:0px; left:0px; box-shadow:none;" class="btn-floating transparent" type="submit" name="submitFavourite">
+					<?php
+					// Create connection
+				  include 'connectvars.php';
+				  $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+				  // Check connection
+				  if ($conn->connect_error) {
+				      die("Connection failed: " . $conn->connect_error);
+				  }
+					$picId = $_GET['pictureId'];
+					$owner = "User1"; //TODO make this do logged in user.
+					$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
+				  $result = $conn->query($sql);
+				  if ($result->num_rows > 0) {
+						echo '<i class="material-icons">favorite</i>';
+				  } else {
+						echo '<i class="material-icons">favorite_border</i>';
+					}
+					?>
+
+				</button>
+			</form>
       <div class="card-content white-text">
 				<div class="col s2 right">
 					<form method="post" id="addRating">
@@ -136,6 +159,29 @@
 						} else{
 							echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 						}
+					} else if (isset($_POST["submitFavourite"])){
+						$picId = $_GET['pictureId'];
+						$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE un/FAVOURITE,NOT PICTURE.
+						$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
+					  $result = $conn->query($sql);
+					  if ($result->num_rows > 0) {	//They are unfavouriting
+							$resultIn = mysqli_query($conn, $queryIn);
+							$query = "DELETE FROM `FinFavourite` WHERE `FinFavourite`.`userID` = '$owner' AND `FinFavourite`.`pictureID` = '$picId'";
+							if(mysqli_query($conn, $query)){
+								//$msg =  "Record added successfully.<p>";
+							} else{
+								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+							}
+					  } else {	//They are favouriting
+							$resultIn = mysqli_query($conn, $queryIn);
+							$query = "INSERT INTO `FinFavourite` (`userID`, `pictureID`) VALUES ('$owner', '$picId')";
+							if(mysqli_query($conn, $query)){
+								//$msg =  "Record added successfully.<p>";
+							} else{
+								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+							}
+						}
+
 					}
 
 				}
