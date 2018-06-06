@@ -3,6 +3,91 @@
 <?php
 		$currentpage="View image";
 ?>
+<?php
+// Create connection
+include 'connectvars.php';
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+// Check connection
+if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+}
+$picId = $_GET['pictureId'];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if(isset($_POST["submitComment"])){
+		// Escape user inputs for security
+		$comment = mysqli_real_escape_string($conn, $_POST['Comment']);
+		$owner = "User1"; //TODO
+		$comID = rand(10,10000000);
+
+		$resultIn = mysqli_query($conn, $queryIn);
+		$query = "INSERT INTO `FinComment` (`commentID`, `pictureID`, `Content`, `Owner`) VALUES ('$comID', '$picId', '$comment', '$owner')";
+		if(mysqli_query($conn, $query)){
+			//$msg =  "Record added successfully.<p>";
+		} else{
+			echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+		}
+	} else if(isset($_POST["submitRating"])){
+		$rating = mysqli_real_escape_string($conn, $_POST['rating']);
+		$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE RATING,NOT PICTURE.
+
+		$sql = "SELECT Owner, Picture FROM FinUserRating WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
+
+		$result = $conn->query($sql);
+		$rowcount=mysqli_num_rows($result);
+		if ($rowcount > 0) {
+			$query = "UPDATE `FinUserRating` SET `Rating` = '$rating' WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
+			if(mysqli_query($conn, $query)){
+				$msg =  "you rated me.<p>";
+			} else{
+				echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+			}
+		} else {
+			$query = "INSERT INTO `FinUserRating` (`Owner`, `Rating`, `Picture`) VALUES ('$owner', '$rating', '$picId')";
+			if(mysqli_query($conn, $query)){
+				$msg =  "you rated me.<p>";
+			} else{
+				echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+			}
+		}
+	} else if (isset($_POST["submitTag"])){
+		$tag = mysqli_real_escape_string($conn, $_POST['tagContent']);
+
+		$resultIn = mysqli_query($conn, $queryIn);
+		$query = "INSERT INTO `FinTagInstance` (`pictureID`, `tagName`) VALUES ('$picId', '$tag')";
+		if(mysqli_query($conn, $query)){
+			//$msg =  "Record added successfully.<p>";
+		} else{
+			echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+		}
+	} else if (isset($_POST["submitFavourite"])){
+		$picId = $_GET['pictureId'];
+		$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE un/FAVOURITE,NOT PICTURE.
+		$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
+		$result = $conn->query($sql);
+		if ($result->num_rows > 0) {	//They are unfavouriting
+			$resultIn = mysqli_query($conn, $queryIn);
+			$query = "DELETE FROM `FinFavourite` WHERE `FinFavourite`.`userID` = '$owner' AND `FinFavourite`.`pictureID` = '$picId'";
+			if(mysqli_query($conn, $query)){
+				//$msg =  "Record added successfully.<p>";
+			} else{
+				echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+			}
+		} else {	//They are favouriting
+			$resultIn = mysqli_query($conn, $queryIn);
+			$query = "INSERT INTO `FinFavourite` (`userID`, `pictureID`) VALUES ('$owner', '$picId')";
+			if(mysqli_query($conn, $query)){
+				//$msg =  "Record added successfully.<p>";
+			} else{
+				echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+			}
+		}
+	}
+	header("Location: " . $_SERVER['REQUEST_URI']);
+	//exit();
+}
+$conn->close();
+?>
 <html>
 	<head>
 		<title>Image</title>
@@ -112,81 +197,8 @@
 							echo '</p></li>';
 			      }
 			  }
-				if ($_SERVER["REQUEST_METHOD"] == "POST") {
-					if(isset($_POST["submitComment"])){
-						// Escape user inputs for security
-						$comment = mysqli_real_escape_string($conn, $_POST['Comment']);
-						$owner = "User1"; //TODO
-						$comID = rand(10,10000000);
-
-						$resultIn = mysqli_query($conn, $queryIn);
-						$query = "INSERT INTO `FinComment` (`commentID`, `pictureID`, `Content`, `Owner`) VALUES ('$comID', '$picId', '$comment', '$owner')";
-						if(mysqli_query($conn, $query)){
-							//$msg =  "Record added successfully.<p>";
-						} else{
-							echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-						}
-					} else if(isset($_POST["submitRating"])){
-						$rating = mysqli_real_escape_string($conn, $_POST['rating']);
-						$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE RATING,NOT PICTURE.
-
-						$sql = "SELECT Owner, Picture FROM FinUserRating WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
-
-					  $result = $conn->query($sql);
-						$rowcount=mysqli_num_rows($result);
-					  if ($rowcount > 0) {
-							$query = "UPDATE `FinUserRating` SET `Rating` = '$rating' WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
-							if(mysqli_query($conn, $query)){
-								$msg =  "you rated me.<p>";
-							} else{
-								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-							}
-						} else {
-							$query = "INSERT INTO `FinUserRating` (`Owner`, `Rating`, `Picture`) VALUES ('$owner', '$rating', '$picId')";
-							if(mysqli_query($conn, $query)){
-								$msg =  "you rated me.<p>";
-							} else{
-								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-							}
-						}
-					} else if (isset($_POST["submitTag"])){
-						$tag = mysqli_real_escape_string($conn, $_POST['tagContent']);
-
-						$resultIn = mysqli_query($conn, $queryIn);
-						$query = "INSERT INTO `FinTagInstance` (`pictureID`, `tagName`) VALUES ('$picId', '$tag')";
-						if(mysqli_query($conn, $query)){
-							//$msg =  "Record added successfully.<p>";
-						} else{
-							echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-						}
-					} else if (isset($_POST["submitFavourite"])){
-						$picId = $_GET['pictureId'];
-						$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE un/FAVOURITE,NOT PICTURE.
-						$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
-					  $result = $conn->query($sql);
-					  if ($result->num_rows > 0) {	//They are unfavouriting
-							$resultIn = mysqli_query($conn, $queryIn);
-							$query = "DELETE FROM `FinFavourite` WHERE `FinFavourite`.`userID` = '$owner' AND `FinFavourite`.`pictureID` = '$picId'";
-							if(mysqli_query($conn, $query)){
-								//$msg =  "Record added successfully.<p>";
-							} else{
-								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-							}
-					  } else {	//They are favouriting
-							$resultIn = mysqli_query($conn, $queryIn);
-							$query = "INSERT INTO `FinFavourite` (`userID`, `pictureID`) VALUES ('$owner', '$picId')";
-							if(mysqli_query($conn, $query)){
-								//$msg =  "Record added successfully.<p>";
-							} else{
-								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-							}
-						}
-
-					}
-
-				}
-			  $conn->close();
-			?>
+				$conn->close();
+				?>
 			<li class="collection-item">
 				<form method="post" id="addComment">
 				<fieldset>
