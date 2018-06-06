@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+
+ ?>
 <!DOCTYPE html>
 <!-- Add Part Info to Table Part -->
 <?php
@@ -26,7 +31,7 @@
 				      die("Connection failed: " . $conn->connect_error);
 				  }
 					$picId = $_GET['pictureId'];
-					$owner = "User1"; //TODO make this do logged in user.
+					$owner =  $_SESSION['Username']; //TODO make this do logged in user.
 					$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
 				  $result = $conn->query($sql);
 				  if ($result->num_rows > 0) {
@@ -116,7 +121,7 @@
 					if(isset($_POST["submitComment"])){
 						// Escape user inputs for security
 						$comment = mysqli_real_escape_string($conn, $_POST['Comment']);
-						$owner = "User1"; //TODO
+						$owner =  $_SESSION['Username']; //TODO
 						$comID = rand(10,10000000);
 
 						$resultIn = mysqli_query($conn, $queryIn);
@@ -128,7 +133,7 @@
 						}
 					} else if(isset($_POST["submitRating"])){
 						$rating = mysqli_real_escape_string($conn, $_POST['rating']);
-						$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE RATING,NOT PICTURE.
+						$owner = $_SESSION['Username']; //TODO THIS SHOULD BE THE OWNER OF THE RATING,NOT PICTURE.
 
 						$sql = "SELECT Owner, Picture FROM FinUserRating WHERE `FinUserRating`.`Owner` = '$owner' AND `FinUserRating`.`Picture` = '$picId'";
 
@@ -161,7 +166,7 @@
 						}
 					} else if (isset($_POST["submitFavourite"])){
 						$picId = $_GET['pictureId'];
-						$owner = "User1"; //TODO THIS SHOULD BE THE OWNER OF THE un/FAVOURITE,NOT PICTURE.
+						$owner = $_SESSION['Username']; //TODO THIS SHOULD BE THE OWNER OF THE un/FAVOURITE,NOT PICTURE.
 						$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
 					  $result = $conn->query($sql);
 					  if ($result->num_rows > 0) {	//They are unfavouriting

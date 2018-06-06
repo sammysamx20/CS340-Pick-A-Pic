@@ -40,8 +40,10 @@
                  die("Connection failed: " . $conn->connect_error);
              }
 
-             $sql = "SELECT P.pictureid, P.owner, P.PictureData, P.Description FROM FinPicture P WHERE P.Description LIKE '%$type%'";
-             $result = $conn->query($sql);
+          //   $sql = "SELECT P.pictureid, P.owner, P.PictureData, P.Description FROM FinPicture P WHERE P.Description LIKE '%$type%'";
+						 //future tag possible search function
+						$sql = "Select DISTINCT  pictureid, owner, PictureData, Description FROM (SELECT DISTINCT P.pictureid, P.owner, P.PictureData, P.Description, T.tagName FROM FinTagInstance T, FinPicture P WHERE T.pictureID = P.pictureID AND (P.Description LIKE '%$type%' or T.tagName LIKE '%$type%')) A";
+						 $result = $conn->query($sql);
              if ($result->num_rows > 0) {
                  // output data of each row
                  while($row = $result->fetch_assoc()) {

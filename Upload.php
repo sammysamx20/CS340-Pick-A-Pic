@@ -43,7 +43,7 @@ session_start();
   $encoded_image=base64_encode($image_data);
 
   $picID = rand(10,10000000);
-  $owner = "User1";
+  $owner = $_SESSION['Username'];
 
   $resultIn = mysqli_query($conn, $queryIn);
   $query = "INSERT INTO `FinPicture` (`pictureID`, `Description`, `Rating`, `PictureData`, `Owner`) VALUES ('$picID', '$description', NULL, '$encoded_image', '$owner')";
