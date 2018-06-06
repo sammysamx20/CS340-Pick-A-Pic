@@ -1000,9 +1000,19 @@ if ($) {
                            {duration: inDuration, queue: false, easing: 'easeOutQuad'} );
 
         // Add and animate caption if it exists
+
         if (origin.data('caption') !== "") {
           var $photo_caption = $('<div class="materialbox-caption"></div>');
           $photo_caption.text(origin.data('caption'));
+          $('body').append($photo_caption);
+          if(origin && origin[0] && origin[0].id !== null){
+            var $photo_id = origin[0].id;
+            $('.materialbox-caption').append(' <a href="image?pictureId=' + $photo_id +'" class="waves-effect blue-text waves-light btn-flat"><i class="material-icons right">send</i>More details</a>');
+          }
+          $photo_caption.css({ "display": "inline" });
+          $photo_caption.velocity({opacity: 1}, {duration: inDuration, queue: false, easing: 'easeOutQuad'});
+        } else {
+          var $photo_caption = $('<div class="materialbox-caption"></div>');
           $('body').append($photo_caption);
           if(origin && origin[0] && origin[0].id !== null){
             var $photo_id = origin[0].id;

@@ -1,8 +1,3 @@
-<?php
-session_start();
-
-
- ?>
 <!DOCTYPE html>
 <!-- Add Part Info to Table Part -->
 <?php
@@ -124,13 +119,22 @@ session_start();
 								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 							}
 						} else {
-							debug_to_console("new entry");
 							$query = "INSERT INTO `FinUserRating` (`Owner`, `Rating`, `Picture`) VALUES ('$owner', '$rating', '$picId')";
 							if(mysqli_query($conn, $query)){
 								$msg =  "you rated me.<p>";
 							} else{
 								echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 							}
+						}
+					} else if (isset($_POST["submitTag"])){
+						$tag = mysqli_real_escape_string($conn, $_POST['tagContent']);
+
+						$resultIn = mysqli_query($conn, $queryIn);
+						$query = "INSERT INTO `FinTagInstance` (`pictureID`, `tagName`) VALUES ('$picId', '$tag')";
+						if(mysqli_query($conn, $query)){
+							//$msg =  "Record added successfully.<p>";
+						} else{
+							echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 						}
 					}
 
@@ -156,6 +160,45 @@ session_start();
 				</form>
 			</li>
 			</ul>
+			<h5>
+			<?php
+
+			  // Create connection
+			  include 'connectvars.php';
+			  $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+			  // Check connection
+			  if ($conn->connect_error) {
+			      die("Connection failed: " . $conn->connect_error);
+			  }
+				$picId = $_GET['pictureId'];
+			  $sql = "SELECT pictureID, tagName FROM FinTagInstance WHERE pictureID = $picId";
+			  $result = $conn->query($sql);
+				$firstTag = true;
+			  if ($result->num_rows > 0) {
+			      // output data of each row
+			      while($row = $result->fetch_assoc()) {
+							if($firstTag == true){
+								$firstTag = false;
+							} else if ($firstTag == false){
+								echo ", ";
+							}
+			        echo $row["tagName"];
+			      }
+			  }
+				?>
+			</h5>
+			<div class="row">
+		    <form method="post" id="addTag" class="col s6">
+		      <div class="row">
+		        <div class="input-field col s6">
+		          <i class="material-icons prefix">control_point</i>
+							<input name="tagContent" id="tagContent" type="text" data-length="30">
+		          <label for="tagContent">Tag Name</label>
+		        </div>
+						<button type="submit" name="submitTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Add</button>
+		      </div>
+		    </form>
+		  </div>
 		</div>
 	</div>
 </div>
