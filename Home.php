@@ -19,6 +19,7 @@ session_start();
 	<?php include 'header.php';?>
 	<section>
     <h2> Pictures </h2>
+
 		<div class="row">
 			<?php
 		    // Create connection
@@ -47,6 +48,7 @@ session_start();
 		    $conn->close();
     	?>
 		</div>
+      <p style="text-align:center;font-size:150%;"> <b >If you want to see more pictures, go to <a href= http://web.engr.oregonstate.edu/~youngsam/cs340/CS340-Pick-A-Pic/listUsers.php?user= > List Users </a> and follow someone!</b></p>
 </body>
 <script>
 $(document).ready(function(){
