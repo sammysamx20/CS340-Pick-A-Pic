@@ -87,6 +87,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
       }
     }
+  } else if (isset($_POST["submitCommentDeletion"])){
+    $cid = mysqli_real_escape_string($conn, $_POST['commentId']);
+
+    $resultIn = mysqli_query($conn, $queryIn);
+    $query = "DELETE FROM `FinComment` WHERE `FinComment`.`commentID` = '$cid'";
+    if(mysqli_query($conn, $query)){
+      //$msg =  "Record added successfully.<p>";
+    } else{
+      echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+      }
   }
   header("Location: " . $_SERVER['REQUEST_URI']);
 }
@@ -199,7 +209,14 @@ $conn->close();
       				echo '<p>';
 			        echo "<br>". $row["Owner"]. "<br>";
 			        echo $row["Content"];
-							echo '</p></li>';
+							echo '</p>';
+							if($row["Owner"] == $_SESSION['Username']){
+								echo '<form method="post">';
+								echo '<input type="hidden" name="commentId" id="commentId" value="'.$row["commentID"].'">';
+								echo '<button style="position:absolute; top:0px; right:0px; box-shadow:none;" class="btn-floating transparent" type="submit" name="submitCommentDeletion">';
+								echo '<i class="material-icons black-text">close</i>';
+							}
+							echo '</li>';
 			      }
 			  }
 			  $conn->close();
