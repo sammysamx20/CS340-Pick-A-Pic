@@ -160,7 +160,6 @@ $conn->close();
                     while($row = $result->fetch_assoc()) {
                           $picowner = $row["owner"];
                     }
-                    echo "picowner $picowner";
                     $query = mysqli_query($conn, "SELECT * FROM FinFollow WHERE Follower = '$na' AND Followed = '$picowner'");
                     echo "<form method = 'post' id = addRating'>";
                     if(mysqli_num_rows($query) > 0){
@@ -192,11 +191,29 @@ $conn->close();
        $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
       if(mysqli_query($conn, $query)){
         echo "<p>Record added successfully.</p>";
+        header("Refresh:0");
       } else{
         echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
       }
 }
+}else if(isset($_POST['following'])){
+  $picId = $_GET['pictureId'];
+  $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+  $result = $conn->query($sql);
+  if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+            $picowner = $row["owner"];
+      }
+$query = "DELETE FROM FinFollow WHERE Follower = '$na' AND  Followed = '$picowner'";
+if(mysqli_query($conn, $query)){
+echo "<p>Record removed successfully.</p>";
+header("Refresh:0");
+}} else{
+echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 }
+}
+
 				function debug_to_console( $data ) {
 					$output = $data;
 					echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
