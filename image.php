@@ -168,6 +168,7 @@ $conn->close();
                     $query = mysqli_query($conn, "SELECT * FROM FinFollow WHERE Follower = '$na' AND Followed = '$picowner'");
                     echo "<form method = 'post' id = addRating'>";
   if($_SESSION['Username'] != NULL){
+    if($_SESSION['Username'] != $picowner){
                     if(mysqli_num_rows($query) > 0){
 
                         echo"<button class='btn waves-effect waves-light' type='submit' name='following'>Following
@@ -180,6 +181,7 @@ $conn->close();
                     echo "</form>";
                 }
               }
+            }
               if($_SESSION['Username'] == $picowner){
                 echo "<form method = 'post' id = delpic'>";
 
