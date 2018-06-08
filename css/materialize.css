@@ -2977,7 +2977,7 @@ table.bordered > tbody > tr {
 }
 
 table.striped > tbody > tr:nth-child(odd) {
-  background-color: #f2f2f2;
+  background-color:#993e3e;
 }
 
 table.striped > tbody > tr > td {
@@ -2989,7 +2989,7 @@ table.highlight > tbody > tr {
 }
 
 table.highlight > tbody > tr:hover {
-  background-color: #f2f2f2;
+  background-color: #993e3e;
 }
 
 table.centered thead tr th, table.centered tbody tr td {

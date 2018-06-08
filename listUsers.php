@@ -30,7 +30,10 @@ header("location: logIn.php?user=");
 	}
 
 // query to select all information from supplier table
-	$query = "SELECT Username, NumPics, firstname, lastname FROM FinUser ";
+
+$loggedUser = $_SESSION['Username'];
+
+	$query = "SELECT Followed FROM FinFollow WHERE Follower='$loggedUser'";
 
 
 // Get results from query
@@ -40,19 +43,18 @@ header("location: logIn.php?user=");
 	}
 // get number of columns in table
 	$fields_num = mysqli_num_fields($result);
+
+
+
 	echo '<div class="row">';
 		echo '<div class="col s12 m12">';
 			echo '<div class="card grey lighten-1">';
 				echo '<div class="card-content black-text">';
-					echo "<h1>Users:</h1>";
+					echo "<h1>You are following:</h1>";
 					echo "<table class='striped' id='t01' border='1'><tr>";
 
 					// printing table headers
-					for($i=0; $i<$fields_num; $i++) {
-						$field = mysqli_fetch_field($result);
-						echo "<td><b>$field->name</b></td>";
 
-					}
           if ($_SESSION['Username'] != NULL){
 
       //    echo "<td><b>Following</b></td>";
