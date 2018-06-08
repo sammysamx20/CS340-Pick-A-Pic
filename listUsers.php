@@ -1,6 +1,9 @@
 <?php
 session_start();
+if($_SESSION['Username'] == NULL){
 
+header("location: logIn.php?user=");
+}
 
  ?>
 <!DOCTYPE html>

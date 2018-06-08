@@ -1,6 +1,9 @@
 <?php
 session_start();
-
+if($_SESSION['Username'] == NULL){
+  
+header("location: logIn.php?user=");
+}
 
  ?>
 <!DOCTYPE html>
@@ -19,7 +22,8 @@ session_start();
 	<?php include 'header.php';?>
 
 	<section>
-    <h2> <?php echo htmlspecialchars($_SESSION['Username']);?>'s Pictures </h2>
+    <h2> <?php
+    echo htmlspecialchars($_SESSION['Username']);?>'s Pictures </h2>
 		<div class="row">
 			<?php
 		    // Create connection
