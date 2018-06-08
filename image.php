@@ -146,8 +146,54 @@ $conn->close();
 				    </p>
 						<button class="btn waves-effect waves-light" type="submit" name="submitRating">Rate
 						</button>
-            <button class="btn waves-effect waves-orange" type="submit" name="Follow">Follow
-            </button>
+            <?php
+            include 'connectvars.php';
+            $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+              $na =  $_SESSION['Username'];
+
+              $result = $conn->query($sql);
+
+              if ($result->num_rows > 0) {
+                  // output data of each row
+                  while($row = $result->fetch_assoc()) {
+                        $picowner = $row["owner"];
+
+                  }
+                }
+
+                $picId = $_GET['pictureId'];
+                $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while($row = $result->fetch_assoc()) {
+                          $picowner = $row["owner"];
+
+
+                    }
+                    echo "picowner $picowner";
+                    $query = mysqli_query($conn, "SELECT * FROM FinFollow WHERE Follower = '$na' AND Followed = '$picowner'");
+
+                    echo "<form method = 'post' id = addRating'>";
+                    if(mysqli_num_rows($query) > 0){
+                        echo"<button class='btn waves-effect waves-light' type='submit' name='following'>Following
+                        </button>";
+                    }else{
+                      echo"<button class='btn waves-effect waves-light' type='submit' name='Follow'>Follow
+                      </button>";
+                    }
+                    echo "</form>";
+                }
+
+
+
+            ?>
 				  </form>
 				</div>
         <!--<span class="card-title">Pictures</span>-->
@@ -167,6 +213,7 @@ $conn->close();
 
               }
        $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
+
       if(mysqli_query($conn, $query)){
         echo "<p>Record added successfully.</p>";
       } else{
