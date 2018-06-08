@@ -27,7 +27,7 @@ session_start();
 	}
 
 // query to select all information from supplier table
-	$query = "SELECT * FROM FinUser ";
+	$query = "SELECT Username, NumPics, firstname, lastname FROM FinUser ";
 
 
 // Get results from query
@@ -50,17 +50,46 @@ session_start();
 						echo "<td><b>$field->name</b></td>";
 
 					}
-          echo "<td><b>Following</b></td>";
+          if ($_SESSION['Username'] != NULL){
+
+      //    echo "<td><b>Following</b></td>";
+        }
 					echo "</tr>\n";
+        $na =  $_SESSION['Username'];
 					while($row = mysqli_fetch_row($result)) {
 						echo "<tr>";
 						// $row is array... foreach( .. ) puts every element
 						// of $row to $cell variable
 						foreach($row as $cell)
 							echo "<td>$cell</td>";
-              echo "<td><button type='button'>Click Me!</button></td>";
+
+              if ($_SESSION['Username'] != NULL){
+
+
+              echo "<form action='' method='POST'>";
+          //    echo "<td><input name = 'follow' type='submit' value='Follow Me'/></td>";
+              echo "</form>";
+
+
+
+
+            }
+            else{
+
+            }
+
 						echo "</tr>\n";
 					}
+          if (isset($_POST['follow'])) {
+              // btnfollow
+
+        $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na','$')  ";
+      if(mysqli_query($conn, $query)){
+        echo "<p>Record added successfully.</p>";
+      } else{
+        echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+      }
+    }
 				echo "</div>";
 			echo "</div>";
 		echo "</div>";
@@ -69,6 +98,7 @@ session_start();
 	mysqli_free_result($result);
 	mysqli_close($conn);
 ?>
+
 </body>
 
 </html>

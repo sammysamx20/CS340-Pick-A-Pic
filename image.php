@@ -146,11 +146,34 @@ $conn->close();
 				    </p>
 						<button class="btn waves-effect waves-light" type="submit" name="submitRating">Rate
 						</button>
+            <button class="btn waves-effect waves-orange" type="submit" name="Follow">Follow
+            </button>
 				  </form>
 				</div>
         <!--<span class="card-title">Pictures</span>-->
 
 			<?php
+    $na =  $_SESSION['Username'];
+      if (isset($_POST['Follow'])) {
+          // btnfollow
+          $picId = $_GET['pictureId'];
+          $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+          $result = $conn->query($sql);
+
+          if ($result->num_rows > 0) {
+              // output data of each row
+              while($row = $result->fetch_assoc()) {
+                    $picowner = $row["owner"];
+
+              }
+       $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
+      if(mysqli_query($conn, $query)){
+        echo "<p>Record added successfully.</p>";
+      } else{
+        echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+      }
+}
+}
 				function debug_to_console( $data ) {
 					$output = $data;
 
@@ -171,6 +194,7 @@ $conn->close();
 			  if ($result->num_rows > 0) {
 			      // output data of each row
 			      while($row = $result->fetch_assoc()) {
+                  $picowner = $row["Owner"];
 			        echo "<br> owner: ". $row["owner"]. "<br>";
 			        echo '<img style="width:80%;" src="data:image/jpeg;base64,'.( $row['PictureData'] ).'"/>' ;
 			        echo "<br> ". $row["Description"]. "<br>";
