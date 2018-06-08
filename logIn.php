@@ -1,7 +1,11 @@
 <?php
 session_start();
 
+if($_SESSION['Username'] != NULL){
 
+header("location: Home.php?user=");
+
+}
  ?>
 <!DOCTYPE html>
 <!-- Add Part Info to Table Part -->
@@ -45,7 +49,7 @@ session_start();
 	    echo "Success, you have logged in!";
 			session_start();
 	                             $_SESSION['Username'] = $Username;
-															 
+                               
 
 	}
 	else{
