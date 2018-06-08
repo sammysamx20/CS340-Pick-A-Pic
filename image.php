@@ -56,9 +56,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(mysqli_query($conn, $query)){
       //$msg =  "Record added successfully.<p>";
     } else{
+      echo "<script type='text/javascript'>";
+      echo "alert('ERROR: Can not use the same tag for same pic')";
+      echo "</script>";
+
+    }
+  }
+  else if (isset($_POST["deleteTag"])){
+      $picId = $_GET['pictureId'];
+    $tag = mysqli_real_escape_string($conn, $_POST['tagContent']);
+    $resultIn = mysqli_query($conn, $queryIn);
+    $query = "DELETE FROM FinTagInstance WHERE tagName = '$tag' AND pictureID = $picId ";
+    if(mysqli_query($conn, $query)){
+      //$msg =  "Record added successfully.<p>";
+    } else{
       echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
     }
-  } else if (isset($_POST["submitFavourite"])){
+  }
+   else if (isset($_POST["submitFavourite"])){
     $picId = $_GET['pictureId'];
     $owner = $_SESSION['Username']; //TODO THIS SHOULD BE THE OWNER OF THE un/FAVOURITE,NOT PICTURE.
     $sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
@@ -385,6 +400,8 @@ if($_SESSION['Username'] != NULL){
 echo '<label for="tagContent">Tag Name</label>';
 echo '</div>';
 echo '<button type="submit" name="submitTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Add</button>';
+echo '<button type="submit" name="deleteTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Delete</button>';
+
 }
 ?>
 		      </div>
