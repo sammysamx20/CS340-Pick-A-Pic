@@ -121,9 +121,11 @@ $conn->close();
 					$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
 				  $result = $conn->query($sql);
 				  if ($result->num_rows > 0) {
+          if($_SESSION['Username'] != NULL){
 						echo '<i class="material-icons">favorite</i>';
 				  } else {
 						echo '<i class="material-icons">favorite_border</i>';
+          }
 					}
 					?>
 
@@ -132,12 +134,14 @@ $conn->close();
       <div class="card-content white-text">
 				<div class="col s2 right">
 					<form method="post" id="addRating">
-				    <p class="range-field">
-				      <input type="range" name="rating" id="rating" min="0" max="5" />
-				    </p>
-						<button class="btn waves-effect waves-light" type="submit" name="submitRating">Rate
-						</button>
+
+
             <?php
+            if($_SESSION['Username'] != NULL){
+            echo " <p class='range-field'>  <input type='range' name='rating' id='rating' min='0' max='5' /> </p>";
+
+          echo " <button class='btn waves-effect waves-light' type='submit' name='submitRating'>Rate</button>";
+            }
             include 'connectvars.php';
             $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
             // Check connection
@@ -162,15 +166,19 @@ $conn->close();
                     }
                     $query = mysqli_query($conn, "SELECT * FROM FinFollow WHERE Follower = '$na' AND Followed = '$picowner'");
                     echo "<form method = 'post' id = addRating'>";
+  if($_SESSION['Username'] != NULL){
                     if(mysqli_num_rows($query) > 0){
+
                         echo"<button class='btn waves-effect waves-light' type='submit' name='following'>Following
                         </button>";
                     }else{
                       echo"<button class='btn waves-effect waves-light' type='submit' name='Follow'>Follow
                       </button>";
+
                     }
                     echo "</form>";
                 }
+              }
             ?>
 				  </form>
 				</div>
@@ -279,20 +287,19 @@ echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 			?>
 			<li class="collection-item">
 				<form method="post" id="addComment">
-				<fieldset>
-				  <p>
-				    <label for="Comment">Add comment:</label>
-				    <input type="text" class="required" name="Comment" id="Comment">
-				  </p>
-				</fieldset>
-			    <p>
-						<button class="btn waves-effect waves-light submit" type="submit" name="submitComment">Submit
-							<i class="material-icons right">send</i>
-						</button>
-						<button class="btn waves-effect waves-light submit" type="reset" name="action">Reset
-							<i class="material-icons right">clear</i>
-						</button>
-			    </p>
+        <?php
+        if($_SESSION['Username'] != NULL){
+      	echo "<fieldset> <p> <label for='Comment'>Add comment:</label>   <input type='text' class='required' name='Comment' id='Comment'> </p>		</fieldset>
+  ";
+        echo '<p>';
+echo '<button class="btn waves-effect waves-light submit" type="submit" name="submitComment">Submit';
+echo '<i class="material-icons right">send</i>';
+echo '</button>';
+echo '<button class="btn waves-effect waves-light submit" type="reset" name="action">Reset';
+echo '<i class="material-icons right">clear</i>';
+echo '</button>';
+echo '</p>';
+          } ?>
 				</form>
 			</li>
 			</ul>
@@ -317,7 +324,7 @@ echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 							} else if ($firstTag == false){
 								echo ", ";
 							}
-			        echo $row["tagName"];
+			        echo "#", $row["tagName"];
 			      }
 			  }
 				?>
@@ -326,11 +333,15 @@ echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
 		    <form method="post" id="addTag" class="col s6">
 		      <div class="row">
 		        <div class="input-field col s6">
-		          <i class="material-icons prefix">control_point</i>
-							<input name="tagContent" id="tagContent" type="text" data-length="30">
-		          <label for="tagContent">Tag Name</label>
-		        </div>
-						<button type="submit" name="submitTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Add</button>
+<?php
+if($_SESSION['Username'] != NULL){
+              echo '<i class="material-icons prefix">control_point</i>';
+               echo '<input name="tagContent" id="tagContent" type="text" data-length="30">';
+echo '<label for="tagContent">Tag Name</label>';
+echo '</div>';
+echo '<button type="submit" name="submitTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Add</button>';
+}
+?>
 		      </div>
 		    </form>
 		  </div>
