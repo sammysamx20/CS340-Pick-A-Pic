@@ -137,6 +137,7 @@ $conn->close();
 
 
             <?php
+            ob_start();
             if($_SESSION['Username'] != NULL){
             echo " <p class='range-field'>  <input type='range' name='rating' id='rating' min='0' max='5' /> </p>";
 
@@ -179,6 +180,48 @@ $conn->close();
                     echo "</form>";
                 }
               }
+              if($_SESSION['Username'] == $picowner){
+                echo "<form method = 'post' id = delpic'>";
+
+                echo '<button class="btn waves-effect waves-light submit" type="delpic" name="delpic">Delete Picture';
+
+  echo "</form>";
+
+              if(isset($_POST['delpic'])){
+                $picId = $_GET['pictureId'];
+                $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while($row = $result->fetch_assoc()) {
+                          $picowner = $row["owner"];
+                    }
+                    $query1 = "DELETE FROM FinTagInstance  WHERE pictureID = $picId ";
+                    if(mysqli_query($conn, $query1)){
+                      echo "<p>Record removed successfully.</p>";
+
+
+
+                    }
+                    else{
+                      echo "ERROR: Could not able to execute $query1. " . mysqli_error($conn);
+                      }
+              $query = "DELETE FROM FinPicture WHERE $picId = pictureid";
+              if(mysqli_query($conn, $query)){
+                echo "<p>Record removed successfully.</p>";
+                echo '<script type="text/javascript">
+                           window.location = "http://web.engr.oregonstate.edu/~youngsam/cs340/CS340-Pick-A-Pic/MyUploads.php?user="
+                      </script>';
+
+
+
+              }
+            } else{
+              echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+              }
+              }
+              }
+              ob_end_flush();
             ?>
 				  </form>
 				</div>
