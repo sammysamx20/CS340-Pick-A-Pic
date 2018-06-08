@@ -146,34 +146,62 @@ $conn->close();
 				    </p>
 						<button class="btn waves-effect waves-light" type="submit" name="submitRating">Rate
 						</button>
-            <button class="btn waves-effect waves-orange" type="submit" name="Follow">Follow
-            </button>
+
 				  </form>
 				</div>
         <!--<span class="card-title">Pictures</span>-->
 
 			<?php
+        echo "<form action='' method='POST'>";
+    echo"  <button class='btn waves-effect waves-orange' type='submit' name='Follow'>Follow  </button>";
+        echo "</form>";
     $na =  $_SESSION['Username'];
       if (isset($_POST['Follow'])) {
           // btnfollow
+
+          while($row = $result->fetch_assoc()) {
+                $picowner = $row["owner"];
+
+          }
           $picId = $_GET['pictureId'];
-          $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+          $sql = "SELECT F.Follower,F.Followed FROM FinFollow F, FinPicture P WHERE F.Follower = '$na' AND F.Followed = '$picowner' AND P.owner = F.Followed ";
           $result = $conn->query($sql);
 
-          if ($result->num_rows > 0) {
+          if ($result->num_rows > 0) { //unfollow
               // output data of each row
+              echo "unfollow";
               while($row = $result->fetch_assoc()) {
                     $picowner = $row["owner"];
 
               }
-       $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
-      if(mysqli_query($conn, $query)){
-        echo "<p>Record added successfully.</p>";
-      } else{
-        echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-      }
+              $resultIn = mysqli_query($conn, $queryIn);
+
+              $query = "DELETE FROM FinFollow WHERE Follower = '$na' AND Followed = '$picowner' ";
+              if(mysqli_query($conn, $query)){
+                //$msg =  "Record added successfully.<p>";
+              } else{
+                echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+              }
+            }
+            else{//they are folliwng
+              echo "follow";
+              while($row = $result->fetch_assoc()) {
+                    $picowner = $row["owner"];
+
+              }
+              $resultIn = mysqli_query($conn, $queryIn);
+              $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
+             if(mysqli_query($conn, $query)){
+               echo "<p>Record added successfully.</p>";
+             } else{
+               echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+             }
+            }
+
+
 }
-}
+
+
 				function debug_to_console( $data ) {
 					$output = $data;
 
