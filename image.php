@@ -156,9 +156,12 @@ $conn->close();
 <div class="row">
   <div class="col s12" style="padding:20px;">
     <div class="card blue-grey darken-1">
-			<form method="post">
-				<button style="position:absolute; top:0px; left:0px; box-shadow:none;" class="btn-floating transparent" type="submit" name="submitFavourite">
-					<?php
+<?php
+  if($_SESSION['Username'] != NULL){
+
+echo '<form method="post">';
+echo '<button style="position:absolute; top:0px; left:0px; box-shadow:none;" class="btn-floating transparent" type="submit" name="submitFavourite">';
+
 					// Create connection
 				  include 'connectvars.php';
 				  $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -171,16 +174,16 @@ $conn->close();
 					$sql = "SELECT pictureID, userID FROM FinFavourite WHERE `FinFavourite`.`pictureID` = '$picId' AND `FinFavourite`.`userID` = '$owner'";
 				  $result = $conn->query($sql);
 				  if ($result->num_rows > 0) {
-          if($_SESSION['Username'] != NULL){
+
 						echo '<i class="material-icons">favorite</i>';
 				  } else {
 						echo '<i class="material-icons">favorite_border</i>';
           }
-					}
-					?>
 
-				</button>
-			</form>
+}
+          echo '</button>';
+          echo '</form>';
+      ?>
       <div class="card-content white-text">
 				<div class="col s2 right">
 					<form method="post" id="addRating">
