@@ -382,12 +382,26 @@ echo '</p>';
 		        <div class="input-field col s6">
 <?php
 if($_SESSION['Username'] != NULL){
+  $picId = $_GET['pictureId'];
+  $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+  $result = $conn->query($sql);
+  if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+            $picowner = $row["owner"];
+      }
+    }
+if($_SESSION['Username'] == $picowner){
+
               echo '<i class="material-icons prefix">control_point</i>';
                echo '<input name="tagContent" id="tagContent" type="text" data-length="30">';
 echo '<label for="tagContent">Tag Name</label>';
 echo '</div>';
+
 echo '<button type="submit" name="submitTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Add</button>';
+
 echo '<button type="submit" name="deleteTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Delete</button>';
+}
 }
 ?>
 		      </div>
