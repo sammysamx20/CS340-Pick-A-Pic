@@ -33,8 +33,7 @@ header("location: logIn.php?user=");
 
 $loggedUser = $_SESSION['Username'];
 
-	$query = "SELECT Followed FROM FinFollow WHERE Follower='$loggedUser'";
-
+$query = "SELECT F.Followed, U.NumPics FROM FinFollow F, FinUser U WHERE Follower='$loggedUser' AND U.Username=F.Followed";
 
 // Get results from query
 	$result = mysqli_query($conn, $query);
@@ -52,9 +51,11 @@ $loggedUser = $_SESSION['Username'];
 				echo '<div class="card-content black-text">';
 					echo "<h1>You are following:</h1>";
 					echo "<table class='striped' id='t01' border='1'><tr>";
-
+          for($i=0; $i<$fields_num; $i++) {
+      						$field = mysqli_fetch_field($result);
+        						echo "<td><b>$field->name</b></td>";
 					// printing table headers
-
+}
           if ($_SESSION['Username'] != NULL){
 
       //    echo "<td><b>Following</b></td>";
