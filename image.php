@@ -59,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       echo "<script type='text/javascript'>";
       echo "alert('ERROR: Can not use the same tag for same pic')";
       echo "</script>";
-
     }
   }
   else if (isset($_POST["deleteTag"])){
@@ -105,6 +104,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
       }
   }
+  $na =  $_SESSION['Username'];
+    if (isset($_POST['Follow'])) {
+        // btnfollow
+        $picId = $_GET['pictureId'];
+        $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                  $picowner = $row["owner"];
+            }
+     $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
+    if(mysqli_query($conn, $query)){
+      echo "<p>Record added successfully.</p>";
+      header("Refresh:0");
+    } else{
+      echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+    }
+}
+}else if(isset($_POST['following'])){
+$picId = $_GET['pictureId'];
+$sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+          $picowner = $row["owner"];
+    }
+$query = "DELETE FROM FinFollow WHERE Follower = '$na' AND  Followed = '$picowner'";
+if(mysqli_query($conn, $query)){
+echo "<p>Record removed successfully.</p>";
+header("Refresh:0");
+}} else{
+echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+}
+}
   header("Location: " . $_SERVER['REQUEST_URI']);
 }
 $conn->close();
@@ -155,7 +190,6 @@ $conn->close();
             ob_start();
             if($_SESSION['Username'] != NULL){
             echo " <p class='range-field'>  <input type='range' name='rating' id='rating' min='0' max='5' /> </p>";
-
           echo " <button class='btn waves-effect waves-light' type='submit' name='submitRating'>Rate</button>";
             }
             include 'connectvars.php';
@@ -185,13 +219,11 @@ $conn->close();
   if($_SESSION['Username'] != NULL){
     if($_SESSION['Username'] != $picowner){
                     if(mysqli_num_rows($query) > 0){
-
                         echo"<button class='btn waves-effect waves-light' type='submit' name='following'>Following
                         </button>";
                     }else{
                       echo"<button class='btn waves-effect waves-light' type='submit' name='Follow'>Follow
                       </button>";
-
                     }
                     echo "</form>";
                 }
@@ -199,11 +231,8 @@ $conn->close();
             }
               if($_SESSION['Username'] == $picowner){
                 echo "<form method = 'post' id = delpic'>";
-
                 echo '<button class="btn waves-effect waves-light submit" type="delpic" name="delpic">Delete Picture';
-
   echo "</form>";
-
               if(isset($_POST['delpic'])){
                 $picId = $_GET['pictureId'];
                 $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
@@ -216,9 +245,6 @@ $conn->close();
                     $query1 = "DELETE FROM FinTagInstance  WHERE pictureID = $picId ";
                     if(mysqli_query($conn, $query1)){
                       echo "<p>Record removed successfully.</p>";
-
-
-
                     }
                     else{
                       echo "ERROR: Could not able to execute $query1. " . mysqli_error($conn);
@@ -229,9 +255,6 @@ $conn->close();
                 echo '<script type="text/javascript">
                            window.location = "http://web.engr.oregonstate.edu/~youngsam/cs340/CS340-Pick-A-Pic/MyUploads.php?user="
                       </script>';
-
-
-
               }
             } else{
               echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
@@ -245,42 +268,6 @@ $conn->close();
         <!--<span class="card-title">Pictures</span>-->
 
 			<?php
-    $na =  $_SESSION['Username'];
-      if (isset($_POST['Follow'])) {
-          // btnfollow
-          $picId = $_GET['pictureId'];
-          $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
-          $result = $conn->query($sql);
-          if ($result->num_rows > 0) {
-              // output data of each row
-              while($row = $result->fetch_assoc()) {
-                    $picowner = $row["owner"];
-              }
-       $query = "INSERT INTO FinFollow (Follower,Followed) VALUES ('$na', '$picowner')  ";
-      if(mysqli_query($conn, $query)){
-        echo "<p>Record added successfully.</p>";
-        header("Refresh:0");
-      } else{
-        echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-      }
-}
-}else if(isset($_POST['following'])){
-  $picId = $_GET['pictureId'];
-  $sql = "SELECT pictureid, owner,PictureData, Rating, Description FROM FinPicture WHERE pictureid = $picId";
-  $result = $conn->query($sql);
-  if ($result->num_rows > 0) {
-      // output data of each row
-      while($row = $result->fetch_assoc()) {
-            $picowner = $row["owner"];
-      }
-$query = "DELETE FROM FinFollow WHERE Follower = '$na' AND  Followed = '$picowner'";
-if(mysqli_query($conn, $query)){
-echo "<p>Record removed successfully.</p>";
-header("Refresh:0");
-}} else{
-echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-}
-}
 
 				function debug_to_console( $data ) {
 					$output = $data;
@@ -401,7 +388,6 @@ echo '<label for="tagContent">Tag Name</label>';
 echo '</div>';
 echo '<button type="submit" name="submitTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Add</button>';
 echo '<button type="submit" name="deleteTag" style="margin-top:20px;" class="waves-effect waves-teal btn-flat">Delete</button>';
-
 }
 ?>
 		      </div>
