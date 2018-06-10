@@ -42,7 +42,7 @@
 
           //   $sql = "SELECT P.pictureid, P.owner, P.PictureData, P.Description FROM FinPicture P WHERE P.Description LIKE '%$type%'";
 						 //future tag possible search function
-						$sql = "Select DISTINCT  pictureid, owner, PictureData, Description FROM (SELECT DISTINCT P.pictureid, P.owner, P.PictureData, P.Description, T.tagName FROM FinTagInstance T, FinPicture P WHERE T.pictureID = P.pictureID AND (P.Description LIKE '%$type%' or T.tagName LIKE '%$type%')) A";
+						$sql = "Select DISTINCT  pictureid, owner, PictureData, Description FROM (SELECT DISTINCT P.pictureid, P.owner, P.PictureData, P.Description, T.tagName FROM FinTagInstance T, FinPicture P WHERE P.Description LIKE '%$type%' or (T.pictureID = P.pictureID AND T.tagName LIKE '%$type%')) A";
 						 $result = $conn->query($sql);
              if ($result->num_rows > 0) {
                  // output data of each row
