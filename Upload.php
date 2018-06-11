@@ -19,6 +19,8 @@ header("location: logIn.php?user=");
 <body>
 
 <?php
+ini_set('post_max_size', '64M');
+ini_set('upload_max_filesize', '64M');
 // change the value of $dbuser and $dbpass to your username and password
 	include 'connectvars.php';
   include 'header.php';
@@ -39,6 +41,30 @@ header("location: logIn.php?user=");
   $description = mysqli_real_escape_string($conn, $_POST['description']);
   $img = $_FILES['file']['tmp_name'];
   $filename = $_FILES['file']['size'];//not used
+  if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+   die("Upload failed with error code " . $_FILES['file']['error']);
+}
+  $info = getimagesize($img);
+  if($info === false){
+
+    echo "<script type='text/javascript'>";
+    echo "alert('ERROR: Can't determine image type for file')";
+    echo "</script>";
+        header("Location: Upload.php?user=");
+      die("Unable to determine image type of uploaded file");
+
+  }
+  if (($info[2] !== IMAGETYPE_GIF) && ($info[2] !== IMAGETYPE_JPEG) && ($info[2] !== IMAGETYPE_PNG)) {
+
+    echo "<script type='text/javascript'>";
+    echo "alert('ERROR: Not an image type!')";
+    echo "</script>";
+    die("Not a gif/jpeg/png");
+
+  }
+  if($_FILES['file']['size'] > 10000000){
+    die('File uploaded exceeds maximum upload size.');
+}
 	debug_to_console($img);
 
   $image_data=file_get_contents($img);
