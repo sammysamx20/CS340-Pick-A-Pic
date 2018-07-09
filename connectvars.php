@@ -1,8 +1,8 @@
 <?php
   // Define database connection constants
-  define('DB_HOST', 'classmysql.engr.oregonstate.edu');
-  define('DB_USER', 'cs340_youngsam');
-  define('DB_PASSWORD', '1230984567Asd@');
-  define('DB_NAME', 'cs340_youngsam');
-  define('CON_STRING', 'mysql:host=classmysql.engr.oregonstate.edu;dname=cs340_youngsam');
+  define('DB_HOST','oniddb.cws.oregonstate.edu');
+  define('DB_USER','youngsam-db');
+  define('DB_PASSWORD', 'eqsAeUJph4RBoll6');
+  define('DB_NAME', 'youngsam-db');
+//  define('CON_STRING', 'mysql:host=classmysql.engr.oregonstate.edu;dname=cs340_youngsam');
 ?>
